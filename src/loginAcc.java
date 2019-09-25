@@ -198,6 +198,12 @@ public void Access(){
 
         jLabel2.setText("PASSWORD :");
 
+        passlog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passlogActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("LOG IN");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -344,6 +350,12 @@ regAccount.setVisible(false);
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
 System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void passlogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passlogActionPerformed
+Access();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passlogActionPerformed
 
     /**
      * @param args the command line arguments

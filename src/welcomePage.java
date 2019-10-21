@@ -28,6 +28,35 @@ public class welcomePage extends javax.swing.JFrame {
         initComponents();
         showRec();
     }
+    public void search(){
+        
+        String prodname = srchfield.getText();
+        
+        try{
+             String sql = "select * from product where Product_name like ?;";
+           Class.forName("com.mysql.jdbc.Driver");
+           Connection conn = (Connection)DriverManager.getConnection("jdbc:mysql://localhost/villaverdereg?", "root", "");
+      
+           PreparedStatement pstmt = conn.prepareStatement(sql);
+           pstmt.setString(1, "%"+prodname+"%");
+           ResultSet rs = pstmt.executeQuery();
+           DefaultTableModel tbl = (DefaultTableModel)table.getModel();
+           tbl.setRowCount(0);
+           if(!rs.isBeforeFirst()){
+               tbl.addRow(new Object[]{"NO DATA", "NO DATA", "NO DATA", "NO DATA"});
+           }else{
+               while(rs.next()){
+                   
+                   tbl.addRow(new Object[]{rs.getString("ID"),rs.getString("Product_name"),rs.getString("Quantity"),rs.getString("Price")});
+               }
+           }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(welcomePage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(welcomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void showRec(){
         String sql = "SELECT * FROM product;";
         try{
@@ -75,6 +104,8 @@ public class welcomePage extends javax.swing.JFrame {
         table = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        srchfield = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
 
         addFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addFrame.setMinimumSize(new java.awt.Dimension(450, 330));
@@ -203,6 +234,14 @@ public class welcomePage extends javax.swing.JFrame {
             }
         });
 
+        srchfield.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                srchfieldKeyReleased(evt);
+            }
+        });
+
+        jLabel5.setText("PRODUCT NAME");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,7 +250,12 @@ public class welcomePage extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(srchfield))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(add, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
@@ -223,18 +267,24 @@ public class welcomePage extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(add, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(srchfield, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         pack();
@@ -358,6 +408,11 @@ try{
         // TODO add your handling code here:
     }//GEN-LAST:event_sbtnActionPerformed
 
+    private void srchfieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_srchfieldKeyReleased
+search();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_srchfieldKeyReleased
+
     /**
      * @param args the command line arguments
      */
@@ -404,11 +459,13 @@ try{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField pdname;
     private javax.swing.JFormattedTextField prc;
     private javax.swing.JSpinner qun;
     private javax.swing.JButton sbtn;
+    private javax.swing.JTextField srchfield;
     private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

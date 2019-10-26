@@ -38,4 +38,23 @@ public class prod_class {
         
         return jeth;
     }
+    public int addQuantity(int id, Object quantity){
+        int je=0;
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = (Connection)DriverManager.getConnection("jdbc:mysql://localhost/villaverdereg?", "root", "");
+            PreparedStatement pstmt = con.prepareStatement("update product set Quantity=(Quantity+?)where ID=?");
+            pstmt.setObject(1, quantity);
+            pstmt.setInt(2, id);
+            je=pstmt.executeUpdate();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(prod_class.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(prod_class.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        return je;
+        
+    }
 }
